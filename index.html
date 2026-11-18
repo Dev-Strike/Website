@@ -1,140 +1,73 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Telegram Quote Generator</title>
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- html2canvas untuk download gambar -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
-        body { font-family: 'Inter', sans-serif; }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>IQC Generator || Gihh Hosting</title>
+  <!-- Google Fonts & FontAwesome -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet5" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="style.css">
 </head>
-<body class="bg-slate-900 text-white min-h-screen flex flex-col items-center justify-center p-4">
+<body>
 
-    <h1 class="text-2xl font-bold mb-6 text-center">Telegram Quote Generator</h1>
+  <!-- Efek Background Glow -->
+  <div class="glow-orb orb-1"></div>
+  <div class="glow-orb orb-2"></div>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 w-full max-w-4xl items-start">
-        
-        <!-- Bagian Preview (Tampilan ala Chat / Quote Telegram) -->
-        <div class="flex justify-center">
-            <div id="capture" class="relative w-[340px] h-[550px] bg-slate-950 rounded-[30px] border-[6px] border-slate-700 shadow-2xl overflow-hidden flex flex-col justify-end p-6">
-                
-                <!-- Background Wallpaper Tipis (Opsional, bikin estetik) -->
-                <div class="absolute inset-0 opacity-10 bg-[radial-gradient(#38bdf8_1px,transparent_1px)] [background-size:16px_16px]"></div>
+  <header>
+    <h1><i class="fa-solid fa-wand-magic-sparkles"></i> IQC GENERATOR</h1>
+    <p class="subtitle">Buat kutipan iPhone custom jadi lebih keren & cepat!</p>
+  </header>
 
-                <!-- Bubble Chat / Quote Box -->
-                <div class="relative z-10 bg-[#18222d] text-slate-100 rounded-2xl p-3 shadow-lg border border-slate-800 flex flex-col gap-2 max-w-[90%]">
-                    
-                    <!-- Foto di Atas Teks (Opsional) -->
-                    <div id="image-container" class="hidden w-full h-44 rounded-xl overflow-hidden bg-slate-900">
-                        <img id="preview-img" src="" alt="Media" class="w-full h-full object-cover">
-                    </div>
-
-                    <!-- Garis / Kutipan Balasan (Quote Style) -->
-                    <div class="border-l-4 border-sky-400 pl-3 py-1 flex flex-col">
-                        <span id="sender-output" class="text-xs font-semibold text-sky-400">eiyrashazira</span>
-                        <p id="quote-output" class="text-xs text-slate-300 mt-0.5 leading-relaxed break-words">
-                            - kasian kamu, kalau kangen cuma bisa liat lastseennya doang
-                        </p>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-
-        <!-- Bagian Kontrol / Form Input -->
-        <div class="bg-slate-800 p-6 rounded-2xl shadow-lg flex flex-col gap-4">
-            <div>
-                <label class="block text-sm font-medium mb-1">Tulis Quote / Chat:</label>
-                <textarea id="quote-input" rows="3" class="w-full bg-slate-700 rounded-lg p-3 text-sm border border-slate-600 focus:outline-none focus:border-sky-500" placeholder="Ketik kata-kata di sini...">- kasian kamu, kalau kangen cuma bisa liat lastseennya doang</textarea>
-            </div>
-
-            <div>
-                <label class="block text-sm font-medium mb-1">Nama Pengirim (Opsional):</label>
-                <input type="text" id="sender-input" value="eiyrashazira" class="w-full bg-slate-700 rounded-lg p-2 text-sm border border-slate-600 focus:outline-none focus:border-sky-500">
-            </div>
-
-            <div>
-                <label class="block text-sm font-medium mb-1">Upload Foto di Atas Quote (Opsional):</label>
-                <input type="file" id="image-input" accept="image/*" class="w-full text-sm text-slate-400 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-sky-600 file:text-white hover:file:bg-sky-700 cursor-pointer">
-                <button id="remove-img" class="mt-2 text-xs text-red-400 hover:underline hidden">Hapus Foto</button>
-            </div>
-
-            <button id="download-btn" class="mt-4 w-full bg-sky-600 hover:bg-sky-700 font-semibold py-3 rounded-lg transition duration-200 shadow-md">
-                Download Gambar
-            </button>
-        </div>
-
+  <main class="container">
+    <div class="input-group">
+      <label for="message"><i class="fa-regular fa-comment-dots"></i> Masukkan Teks:</label>
+      <input type="text" id="message" placeholder="Tuliskan Kata-Kata Kelen Bray... ✨" autocomplete="off">
     </div>
+    
+    <button onclick="generateImage()">
+      <span>Langsung Kirim Aja</span> <i class="fa-solid fa-paper-plane"></i>
+    </button>
 
-    <!-- Script JavaScript -->
-    <script>
-        const quoteInput = document.getElementById('quote-input');
-        const quoteOutput = document.getElementById('quote-output');
-        const senderInput = document.getElementById('sender-input');
-        const senderOutput = document.getElementById('sender-output');
-        const imageInput = document.getElementById('image-input');
-        const previewImg = document.getElementById('preview-img');
-        const imageContainer = document.getElementById('image-container');
-        const removeImgBtn = document.getElementById('remove-img');
-        const downloadBtn = document.getElementById('download-btn');
-        const captureArea = document.getElementById('capture');
+    <div class="result" id="result"></div>
+  </main>
 
-        // Update teks quote
-        quoteInput.addEventListener('input', () => {
-            quoteOutput.textContent = quoteInput.value || '...';
-        });
+  <footer>
+    <p>© 2026 <span>Gihh Hosting</span>. All Rights Reserved.</p>
+  </footer>
 
-        // Update nama pengirim
-        senderInput.addEventListener('input', () => {
-            senderOutput.textContent = senderInput.value;
-        });
+  <script>
+    function generateImage() {
+      const message = document.getElementById("message").value.trim();
+      const resultDiv = document.getElementById("result");
 
-        // Handle upload foto
-        imageInput.addEventListener('change', (e) => {
-            const file = e.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(event) {
-                    previewImg.src = event.target.result;
-                    imageContainer.classList.remove('hidden');
-                    removeImgBtn.classList.remove('hidden');
-                }
-                reader.readAsDataURL(file);
-            }
-        });
+      if (!message) {
+        alert("Masukan Lah Dulu Text Nya Anjg!!");
+        return;
+      }
 
-        // Hapus foto
-        removeImgBtn.addEventListener('click', () => {
-            imageInput.value = '';
-            previewImg.src = '';
-            imageContainer.classList.add('hidden');
-            removeImgBtn.classList.add('hidden');
-        });
+      resultDiv.innerHTML = `
+        <div class="loader-container">
+          <div class="loader"></div>
+          <p>Abang Proses Dulu Ya...</p>
+        </div>
+      `;
 
-        // Download gambar
-        downloadBtn.addEventListener('click', () => {
-            downloadBtn.textContent = "Memproses...";
-            downloadBtn.disabled = true;
+      const apiUrl = `https://brat.siputzx.my.id/iphone-quoted?time=11%3A26&messageText=${encodeURIComponent(message)}&carrierName=INDOSAT%20OOREDOO&batteryPercentage=88&signalStrength=4&emojiStyle=apple`;
 
-            html2canvas(captureArea, { scale: 2, useCORS: true }).then(canvas => {
-                const link = document.createElement('a');
-                link.download = 'telegram-quote.png';
-                link.href = canvas.toDataURL('image/png');
-                link.click();
-                
-                downloadBtn.textContent = "Download Gambar";
-                downloadBtn.disabled = false;
-            }).catch(err => {
-                console.error("Gagal mendownload:", err);
-                downloadBtn.textContent = "Download Gambar";
-                downloadBtn.disabled = false;
-            });
-        });
-    </script>
+      setTimeout(() => {
+        resultDiv.innerHTML = `
+          <p class="success-text"><i class="fa-solid fa-circle-check"></i> Kiw Kiw Ini Hasil Nya:</p>
+          <div class="image-wrapper">
+            <img src="${apiUrl}" alt="Generated Image">
+          </div>
+          <a class="download-btn" href="${apiUrl}" target="_blank" download="iqc-image.png">
+            <i class="fa-solid fa-download"></i> Download Gambar
+          </a>
+        `;
+      }, 800);
+    }
+  </script>
 </body>
 </html>
