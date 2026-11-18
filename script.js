@@ -1,6 +1,6 @@
 async function fetchSource() {
-    const urlInput = document.getElementById('urlInput').value;
-    const outputArea = document.getElementById('resultOutput');
+    let urlInput = document.getElementById('uri').value.trim();
+    const outputArea = document.getElementById('code-block');
     const loadingText = document.getElementById('loading');
 
     if (!urlInput) {
@@ -8,10 +8,15 @@ async function fetchSource() {
         return;
     }
 
+    // Otomatis tambahkan https:// jika pengguna lupa mengetiknya
+    if (!urlInput.startsWith('http://') && !urlInput.startsWith('https://')) {
+        urlInput = 'https://' + urlInput;
+    }
+
     loadingText.classList.remove('hidden');
     outputArea.value = "";
 
-    // Menggunakan CORS proxy gratis untuk menghindari blokir browser
+    // Menggunakan CORS Proxy publik agar tidak diblokir browser
     const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(urlInput)}`;
 
     try {
@@ -21,10 +26,10 @@ async function fetchSource() {
         if (data.contents) {
             outputArea.value = data.contents;
         } else {
-            outputArea.value = "Gagal mengambil konten dari URL tersebut.";
+            outputArea.value = "Gagal mengambil konten. Website tersebut mungkin melarang akses dari luar.";
         }
     } catch (error) {
-        outputArea.value = "Terjadi kesalahan: " + error.message;
+        outputArea.value = "Terjadi kesalahan koneksi: " + error.message;
     } finally {
         loadingText.classList.add('hidden');
     }
