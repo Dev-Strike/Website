@@ -1,127 +1,29 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>IQC Generator || Gihh Hosting</title>
-  <!-- Google Fonts & FontAwesome -->
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web Source Viewer</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
-  <!-- Efek Background Glow Merah -->
-  <div class="glow-orb orb-1"></div>
-  <div class="glow-orb orb-2"></div>
-
-  <header>
-    <h1><i class="fa-solid fa-wand-magic-sparkles"></i> IQC GENERATOR</h1>
-    <p class="subtitle">Buat kutipan iPhone custom jadi lebih keren & cepat!</p>
-  </header>
-
-  <main class="container">
-    <!-- Input Opsional Foto -->
-    <div class="input-group">
-      <label for="imageUpload"><i class="fa-regular fa-image"></i> Masukkan Foto (Opsional):</label>
-      <input type="file" id="imageUpload" accept="image/*" onchange="previewImage(event)">
-      
-      <!-- Preview Foto di Atas Chat -->
-      <div id="imagePreviewContainer" class="preview-container" style="display: none;">
-        <img id="previewImg" src="" alt="Preview">
-        <button type="button" class="remove-img-btn" onclick="removeImage()"><i class="fa-solid fa-xmark"></i> Hapus Foto</button>
-      </div>
-    </div>
-
-    <div class="input-group">
-      <label for="message"><i class="fa-regular fa-comment-dots"></i> Masukkan Teks:</label>
-      <input type="text" id="message" placeholder="Tuliskan Kata-Kata Kelen Bray... ✨" autocomplete="off">
-    </div>
-    
-    <button onclick="generateImage()">
-      <span>Langsung Kirim Aja</span> <i class="fa-solid fa-paper-plane"></i>
-    </button>
-
-    <div class="result" id="result"></div>
-  </main>
-
-  <script>
-    let uploadedImageBase64 = "";
-
-    // Fungsi Preview Foto
-    function previewImage(event) {
-      const file = event.target.files[0];
-      const previewContainer = document.getElementById("imagePreviewContainer");
-      const previewImg = document.getElementById("previewImg");
-
-      if (file) {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-          uploadedImageBase64 = e.target.result; // Simpan data base64 jika nanti butuh
-          previewImg.src = e.target.result;
-          previewContainer.style.display = "block";
-        }
-        reader.readAsDataURL(file);
-      }
-    }
-
-    // Fungsi Hapus Foto Opsional
-    function removeImage() {
-      document.getElementById("imageUpload").value = "";
-      document.getElementById("imagePreviewContainer").style.display = "none";
-      document.getElementById("previewImg").src = "";
-      uploadedImageBase64 = "";
-    }
-
-    // Fungsi Generate Gambar & Download Otomatis Bernama Quote.png
-    async function generateImage() {
-      const message = document.getElementById("message").value.trim();
-      const resultDiv = document.getElementById("result");
-
-      if (!message) {
-        alert("Masukan Lah Dulu Text Nya Anjg!!");
-        return;
-      }
-
-      resultDiv.innerHTML = `
-        <div class="loader-container">
-          <div class="loader"></div>
-          <p>Abang Proses Dulu Ya...</p>
+    <div class="container">
+        <h2>🔍 Web Source Code Viewer</h2>
+        <p>Masukkan URL website yang ingin kamu lihat kodenya:</p>
+        
+        <div class="input-group">
+            <input type="url" id="urlInput" placeholder="https://contoh.com" required>
+            <button onclick="fetchSource()">Ambil Kode</button>
         </div>
-      `;
 
-      const apiUrl = `https://brat.siputzx.my.id/iphone-quoted?time=11%3A26&messageText=${encodeURIComponent(message)}&carrierName=INDOSAT%20OOREDOO&batteryPercentage=88&signalStrength=4&emojiStyle=apple`;
+        <div id="loading" class="hidden">Sedang mengambil data...</div>
 
-      setTimeout(async () => {
-        try {
-          // Fetch gambar ke blob agar bisa didownload dengan nama custom "Quote.png"
-          const response = await fetch(apiUrl);
-          const blob = await response.blob();
-          const blobUrl = URL.createObjectURL(blob);
+        <div class="result-section">
+            <h3>Hasil Source Code:</h3>
+            <textarea id="resultOutput" readonly placeholder="Kode HTML/CSS/JS akan muncul di sini..."></textarea>
+        </div>
+    </div>
 
-          resultDiv.innerHTML = `
-            <p class="success-text"><i class="fa-solid fa-circle-check"></i> Kiw Kiw Ini Hasil Nya:</p>
-            <div class="image-wrapper">
-              <img src="${blobUrl}" alt="Generated Image">
-            </div>
-            <a class="download-btn" href="${blobUrl}" download="Quote.png">
-              <i class="fa-solid fa-download"></i> Download Gambar
-            </a>
-          `;
-        } catch (err) {
-          // Fallback jika fetch diblokir CORS
-          resultDiv.innerHTML = `
-            <p class="success-text"><i class="fa-solid fa-circle-check"></i> Kiw Kiw Ini Hasil Nya:</p>
-            <div class="image-wrapper">
-              <img src="${apiUrl}" alt="Generated Image">
-            </div>
-            <a class="download-btn" href="${apiUrl}" target="_blank" download="Quote.png">
-              <i class="fa-solid fa-download"></i> Download Gambar
-            </a>
-          `;
-        }
-      }, 800);
-    }
-  </script>
+    <script src="script.js"></script>
 </body>
 </html>
