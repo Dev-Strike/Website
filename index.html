@@ -1,26 +1,25 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="id" data-theme="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Web Source Viewer</title>
+    <title>Web Source Viewer Custom</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="container">
-        <h2>🔍 Web Source Code Viewer</h2>
-        <p>Masukkan URL website yang ingin kamu lihat kodenya:</p>
+        <h2>🔍 View Page Source Online</h2>
+        <p>Masukkan URL website untuk melihat source code-nya:</p>
         
-        <div class="input-group">
-            <input type="url" id="urlInput" placeholder="https://contoh.com" required>
-            <button onclick="fetchSource()">Ambil Kode</button>
+        <div class="url-input-container">
+            <input type="text" id="uri" placeholder="contoh.com atau https://contoh.com" required>
+            <button id="submit-btn" onclick="fetchSource()">View Source</button>
         </div>
 
-        <div id="loading" class="hidden">Sedang mengambil data...</div>
+        <div id="loading" class="hidden" style="margin: 15px 0; color: #06b6d4;">Sedang mengambil data website...</div>
 
-        <div class="result-section">
-            <h3>Hasil Source Code:</h3>
-            <textarea id="resultOutput" readonly placeholder="Kode HTML/CSS/JS akan muncul di sini..."></textarea>
+        <div class="code-section" style="margin-top: 20px;">
+            <textarea id="code-block" readonly placeholder="Source code HTML akan muncul di sini..."></textarea>
         </div>
     </div>
 
