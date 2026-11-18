@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>iPhone Quote Generator</title>
-    <!-- Tailwind CSS untuk styling cepat -->
+    <title>Telegram Quote Generator</title>
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- html2canvas untuk fitur download gambar -->
+    <!-- html2canvas untuk download gambar -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
@@ -15,83 +15,86 @@
 </head>
 <body class="bg-slate-900 text-white min-h-screen flex flex-col items-center justify-center p-4">
 
-    <h1 class="text-2xl font-bold mb-6 text-center">iPhone Quote Generator</h1>
+    <h1 class="text-2xl font-bold mb-6 text-center">Telegram Quote Generator</h1>
 
     <div class="grid grid-cols-1 md:grid-cols-2 gap-8 w-full max-w-4xl items-start">
         
-        <!-- Bagian Preview (Tampilan ala iPhone Lock Screen) -->
+        <!-- Bagian Preview (Tampilan ala Chat / Quote Telegram) -->
         <div class="flex justify-center">
-            <div id="capture" class="relative w-[300px] h-[600px] bg-black rounded-[40px] border-[8px] border-slate-700 shadow-2xl overflow-hidden flex flex-col items-center justify-center p-6 text-center">
+            <div id="capture" class="relative w-[340px] h-[550px] bg-slate-950 rounded-[30px] border-[6px] border-slate-700 shadow-2xl overflow-hidden flex flex-col justify-end p-6">
                 
-                <!-- Wallpaper / Foto Opsional -->
-                <div id="image-container" class="mb-4 hidden w-32 h-32 rounded-2xl overflow-hidden border-2 border-white/20 shadow-lg">
-                    <img id="preview-img" src="" alt="Uploaded" class="w-full h-full object-cover">
+                <!-- Background Wallpaper Tipis (Opsional, bikin estetik) -->
+                <div class="absolute inset-0 opacity-10 bg-[radial-gradient(#38bdf8_1px,transparent_1px)] [background-size:16px_16px]"></div>
+
+                <!-- Bubble Chat / Quote Box -->
+                <div class="relative z-10 bg-[#18222d] text-slate-100 rounded-2xl p-3 shadow-lg border border-slate-800 flex flex-col gap-2 max-w-[90%]">
+                    
+                    <!-- Foto di Atas Teks (Opsional) -->
+                    <div id="image-container" class="hidden w-full h-44 rounded-xl overflow-hidden bg-slate-900">
+                        <img id="preview-img" src="" alt="Media" class="w-full h-full object-cover">
+                    </div>
+
+                    <!-- Garis / Kutipan Balasan (Quote Style) -->
+                    <div class="border-l-4 border-sky-400 pl-3 py-1 flex flex-col">
+                        <span id="sender-output" class="text-xs font-semibold text-sky-400">eiyrashazira</span>
+                        <p id="quote-output" class="text-xs text-slate-300 mt-0.5 leading-relaxed break-words">
+                            - kasian kamu, kalau kangen cuma bisa liat lastseennya doang
+                        </p>
+                    </div>
                 </div>
 
-                <!-- Jam Ala Lock Screen iPhone -->
-                <div class="mb-6">
-                    <div id="lock-time" class="text-5xl font-semibold tracking-tight text-white drop-shadow-md">09:41</div>
-                    <div id="lock-date" class="text-xs text-white/70 mt-1 font-medium drop-shadow-sm">Kamis, 19 November</div>
-                </div>
-
-                <!-- Teks Quote / Kata-kata -->
-                <div class="w-full px-2">
-                    <p id="quote-output" class="text-white text-sm font-normal leading-relaxed drop-shadow-md break-words">
-                        "Hidup bukan tentang menemukan diri sendiri, tapi tentang menciptakan diri sendiri."
-                    </p>
-                </div>
             </div>
         </div>
 
         <!-- Bagian Kontrol / Form Input -->
         <div class="bg-slate-800 p-6 rounded-2xl shadow-lg flex flex-col gap-4">
             <div>
-                <label class="block text-sm font-medium mb-1">Tulis Quote / Kata-kata:</label>
-                <textarea id="quote-input" rows="4" class="w-full bg-slate-700 rounded-lg p-3 text-sm border border-slate-600 focus:outline-none focus:border-indigo-500" placeholder="Ketik kata-kata mutiara di sini...">"Hidup bukan tentang menemukan diri sendiri, tapi tentang menciptakan diri sendiri."</textarea>
+                <label class="block text-sm font-medium mb-1">Tulis Quote / Chat:</label>
+                <textarea id="quote-input" rows="3" class="w-full bg-slate-700 rounded-lg p-3 text-sm border border-slate-600 focus:outline-none focus:border-sky-500" placeholder="Ketik kata-kata di sini...">- kasian kamu, kalau kangen cuma bisa liat lastseennya doang</textarea>
             </div>
 
             <div>
-                <label class="block text-sm font-medium mb-1">Upload Foto (Opsional):</label>
-                <input type="file" id="image-input" accept="image/*" class="w-full text-sm text-slate-400 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-indigo-600 file:text-white hover:file:bg-indigo-700 cursor-pointer">
+                <label class="block text-sm font-medium mb-1">Nama Pengirim (Opsional):</label>
+                <input type="text" id="sender-input" value="eiyrashazira" class="w-full bg-slate-700 rounded-lg p-2 text-sm border border-slate-600 focus:outline-none focus:border-sky-500">
+            </div>
+
+            <div>
+                <label class="block text-sm font-medium mb-1">Upload Foto di Atas Quote (Opsional):</label>
+                <input type="file" id="image-input" accept="image/*" class="w-full text-sm text-slate-400 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-sky-600 file:text-white hover:file:bg-sky-700 cursor-pointer">
                 <button id="remove-img" class="mt-2 text-xs text-red-400 hover:underline hidden">Hapus Foto</button>
             </div>
 
-            <div>
-                <label class="block text-sm font-medium mb-1">Jam Lock Screen:</label>
-                <input type="text" id="time-input" value="09:41" class="w-full bg-slate-700 rounded-lg p-2 text-sm border border-slate-600 focus:outline-none focus:border-indigo-500">
-            </div>
-
-            <button id="download-btn" class="mt-4 w-full bg-indigo-600 hover:bg-indigo-700 font-semibold py-3 rounded-lg transition duration-200 shadow-md">
+            <button id="download-btn" class="mt-4 w-full bg-sky-600 hover:bg-sky-700 font-semibold py-3 rounded-lg transition duration-200 shadow-md">
                 Download Gambar
             </button>
         </div>
 
     </div>
 
-    <!-- Script JavaScript untuk Interaksi -->
+    <!-- Script JavaScript -->
     <script>
         const quoteInput = document.getElementById('quote-input');
         const quoteOutput = document.getElementById('quote-output');
+        const senderInput = document.getElementById('sender-input');
+        const senderOutput = document.getElementById('sender-output');
         const imageInput = document.getElementById('image-input');
         const previewImg = document.getElementById('preview-img');
         const imageContainer = document.getElementById('image-container');
         const removeImgBtn = document.getElementById('remove-img');
-        const timeInput = document.getElementById('time-input');
-        const lockTime = document.getElementById('lock-time');
         const downloadBtn = document.getElementById('download-btn');
         const captureArea = document.getElementById('capture');
 
-        // Update teks quote secara real-time
+        // Update teks quote
         quoteInput.addEventListener('input', () => {
             quoteOutput.textContent = quoteInput.value || '...';
         });
 
-        // Update jam secara real-time
-        timeInput.addEventListener('input', () => {
-            lockTime.textContent = timeInput.value || '09:41';
+        // Update nama pengirim
+        senderInput.addEventListener('input', () => {
+            senderOutput.textContent = senderInput.value;
         });
 
-        // Handle upload foto opsional
+        // Handle upload foto
         imageInput.addEventListener('change', (e) => {
             const file = e.target.files[0];
             if (file) {
@@ -105,7 +108,7 @@
             }
         });
 
-        // Hapus foto jika tidak jadi dipakai
+        // Hapus foto
         removeImgBtn.addEventListener('click', () => {
             imageInput.value = '';
             previewImg.src = '';
@@ -113,14 +116,14 @@
             removeImgBtn.classList.add('hidden');
         });
 
-        // Fitur Download Gambar
+        // Download gambar
         downloadBtn.addEventListener('click', () => {
             downloadBtn.textContent = "Memproses...";
             downloadBtn.disabled = true;
 
             html2canvas(captureArea, { scale: 2, useCORS: true }).then(canvas => {
                 const link = document.createElement('a');
-                link.download = 'iphone-quote.png';
+                link.download = 'telegram-quote.png';
                 link.href = canvas.toDataURL('image/png');
                 link.click();
                 
